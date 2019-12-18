@@ -320,11 +320,11 @@ class CountriesApi(object):
                 return list(map(lambda c: c.value, cls))
 
         class Region(ExtendedEnum):
-            AFRICA = 'africa'
-            AMERICAS = 'americas'
-            ASIA = 'asia'
-            EUROPE = 'europe'
-            OCEANIA = 'oceania'
+            AFRICA = "africa"
+            AMERICAS = "americas"
+            ASIA = "asia"
+            EUROPE = "europe"
+            OCEANIA = "oceania"
 
         if not region in Region._value2member_map_:
             raise ValueError(f"Valid regions are: {Region.list()}")
