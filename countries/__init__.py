@@ -1,4 +1,4 @@
-"""python-countries"""
+# -*- coding: utf-8 -*-
 
 import enum
 import logging
@@ -87,7 +87,6 @@ class CountriesApi(object):
 
     def __init__(self):
         self.base_url = "https://restcountries.eu/rest/v2/"
-        self.params = dict()
 
     @staticmethod
     def _check_http_status(status: int) -> None:
