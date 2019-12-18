@@ -22,6 +22,7 @@ setup(
          'Topic :: Software Development :: RESTful API Wrapper',
          'Programming Language :: Python :: 3.6'
      ],
+     python_requires='>=3.6',
      keywords='REST Countries API',
      packages=find_packages(),
      install_requires=[
