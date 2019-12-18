@@ -301,13 +301,14 @@ class CountriesApi(object):
 
     def region(self, region: str) -> dict:
         """
-        Request capital city endpoint
-        Search by calling code
+        Request region endpoint
+        Search by region
 
-            (i.e) - "https://restcountries.eu/rest/v2/callingcode/372"
+            (i.e) - "https://restcountries.eu/rest/v2/region/americas"
 
         Args:
-            region: (enum.Enum) - region
+            region: (str) - region
+            [Africa, Americas, Asia, Europe, Oceania]
 
         Returns:
             resp: (dict) - json response object
