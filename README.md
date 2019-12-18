@@ -1,4 +1,4 @@
-<p align="center"> # python-countries </p>
+# <p align="center"> python-countries </p>
 
 <p align="center">
 <a href="https://travis-ci.com/leonkozlowski/python-countries"><img alt="Build Status" src="https://travis-ci.com/leonkozlowski/python-countries.svg?branch=master"></a>
