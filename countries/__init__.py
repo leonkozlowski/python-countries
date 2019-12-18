@@ -1,6 +1,7 @@
 """python-countries"""
 
 import logging
+import re
 import requests
 
 logging.basicConfig(level="INFO")
@@ -16,7 +17,18 @@ __status__ = "Development"
 
 class CountriesApi(object):
     """
+    Python bindings (API Wrapper)
+    Get information about countries via a RESTful API
 
+
+    Usage:
+        API Key: None
+
+        >>> client = CountriesApi()
+
+        >>> client.full_name(name='United States')
+
+        >>>
     """
 
     def __init__(self):
@@ -24,11 +36,14 @@ class CountriesApi(object):
         self.params = dict()
 
     @staticmethod
-    def _check_http_status(status: int):
+    def _check_http_status(status: int) -> None:
         """
         Check Request Status and raise exception where applicable
-        :param status:
-        :return:
+        Args
+            status: (int) - HTTP request status code
+
+        Returns:
+            None: (NoneType) - raise exception on failure
         """
         if 500 <= status <= 503:
             logger.error(f"Exception: {status}")
@@ -64,8 +79,8 @@ class CountriesApi(object):
         if not name:
             raise ValueError("Please enter a name for country_name request")
 
-        resp_obj = requests.get(url=f"{self.base_url}name/{name.lower()}")
-
+        stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
+        resp_obj = requests.get(url=f"{self.base_url}name/{stripped_name.lower()}")
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
@@ -88,12 +103,12 @@ class CountriesApi(object):
         if not name:
             raise ValueError("Please enter a name for country_name request")
 
-        url = f"{self.base_url}name/{name.lower()}"
+        stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
+        url = f"{self.base_url}name/{stripped_name.lower()}"
 
         params = {"fullText": True}
 
         resp_obj = requests.get(url=url, params=params)
-
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
@@ -122,7 +137,6 @@ class CountriesApi(object):
         url = f"{self.base_url}alpha/{code.lower()}"
 
         resp_obj = requests.get(url=url)
-
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
@@ -148,7 +162,31 @@ class CountriesApi(object):
         url = f"{self.base_url}currency/{currency.lower()}"
 
         resp_obj = requests.get(url=url)
+        self._check_http_status(resp_obj.status_code)
 
+        resp = resp_obj.json()
+
+        return resp
+
+    def language(self, language: str):
+        """
+        Request language endpoint
+        Search by ISO 639-1 language code
+
+            (i.e) - "https://restcountries.eu/rest/v2/lang/es"
+
+        Args:
+            language: (str) - ISO 639-1 language code
+
+        Returns:
+            resp: (dict) - json response object
+        """
+        if not language:
+            raise ValueError("Please enter a name for country_name request")
+
+        url = f"{self.base_url}lang/{language.lower()}"
+
+        resp_obj = requests.get(url=url)
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
