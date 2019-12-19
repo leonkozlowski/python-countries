@@ -2,6 +2,7 @@
 
 <p align="center">
 <a href="https://travis-ci.com/leonkozlowski/python-countries"><img alt="Build Status" src="https://travis-ci.com/leonkozlowski/python-countries.svg?branch=master"></a>
+<a href='https://coveralls.io/github/leonkozlowski/python-countries'><img src='https://coveralls.io/repos/github/leonkozlowski/python-countries/badge.svg' alt='Coverage Status' /></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 <a href="https://pypi.org/project/python-countries"><img alt="PyPI" src="https://img.shields.io/pypi/v/python-countries"></a>
 </p>
