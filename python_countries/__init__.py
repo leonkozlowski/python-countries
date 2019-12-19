@@ -30,7 +30,7 @@ class CountriesApi(object):
         >>> client.full_name(name='Colombia')
 
     Returns:
-        [{
+        {
             "name": "Colombia",
             "topLevelDomain": [".co"],
             "alpha2Code": "CO",
@@ -82,7 +82,7 @@ class CountriesApi(object):
                 "otherNames": ["Unión de Naciones Suramericanas"..."]
             }],
             "cioc": "COL"
-        }]
+        }
     """
 
     def __init__(self):
@@ -196,7 +196,7 @@ class CountriesApi(object):
 
         return resp
 
-    def currency(self, currency: str) -> dict:
+    def currency(self, currency: str) -> list:
         """
         Request "currency" endpoint
         Search by ISO 4217 currency code
@@ -262,10 +262,11 @@ class CountriesApi(object):
         if not city:
             raise ValueError("Please enter a capital city for python-countries request")
 
-        stripped_city = re.sub(r"\s+", "", city, flags=re.UNICODE)
+        stripped_city = re.sub(r"\s+", "?", city, flags=re.UNICODE)
         url = f"{self.base_url}capital/{stripped_city.lower()}"
 
         resp_obj = requests.get(url=url)
+
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
@@ -336,3 +337,110 @@ class CountriesApi(object):
         resp = resp_obj.json()
 
         return resp
+
+
+class CountryResponse(dict):
+    def __init__(self, data: dict):
+        """
+        Country REST API Response Object Access
+        Args:
+            data: (dict) response json object
+        """
+
+        super(CountryResponse, self).__init__(data)
+
+    @property
+    def name(self) -> str:
+        return self.get('name', None) if self else None
+
+    @property
+    def top_level_domain(self) -> list:
+        return self.get('topLevelDomain', None) if self else None
+
+    @property
+    def alpha_two_code(self) -> str:
+        return self.get('alpha2Code', None) if self else None
+
+    @property
+    def alpha_three_code(self) -> str:
+        return self.get('alpha3Code', None) if self else None
+
+    @property
+    def calling_codes(self) -> list:
+        return self.get('callingCodes', None) if self else None
+
+    @property
+    def capital(self) -> str:
+        return self.get('capital', None) if self else None
+
+    @property
+    def alternate_spellings(self) -> list:
+        return self.get('altSpellings', None) if self else None
+
+    @property
+    def region(self) -> str:
+        return self.get('region') if self else None
+
+    @property
+    def subregion(self) -> str:
+        return self.get('subregion') if self else None
+
+    @property
+    def population(self) -> int:
+        return self.get('population') if self else None
+
+    @property
+    def lat_long(self) -> list:
+        return self.get('latlng') if self else None
+
+    @property
+    def demonym(self) -> str:
+        return self.get('demonym') if self else None
+
+    @property
+    def area(self) -> float:
+        return self.get('area') if self else None
+
+    @property
+    def gini(self) -> float:
+        return self.get('gini') if self else None
+
+    @property
+    def timezones(self) -> list:
+        return self.get('timezones') if self else None
+
+    @property
+    def borders(self) -> list:
+        return self.get('borders') if self else None
+
+    @property
+    def native_name(self) -> str:
+        return self.get('nativeName') if self else None
+
+    @property
+    def numeric_code(self) -> str:
+        return self.get('numericCode') if self else None
+
+    @property
+    def currencies(self) -> list:
+        return self.get('currencies') if self else None
+
+    @property
+    def languages(self) -> list:
+        return self.get('languages') if self else None
+
+    @property
+    def translations(self) -> dict:
+        return self.get('translations') if self else None
+
+    @property
+    def flag(self) -> str:
+        return self.get('flag') if self else None
+
+    @property
+    def regional_blocs(self) -> list:
+        return self.get('regionalBlocs') if self else None
+
+    @property
+    def cioc(self) -> str:
+        return self.get('cioc') if self else None

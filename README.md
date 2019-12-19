@@ -32,7 +32,7 @@ Request for country data by full name
 
 Response for `full_name` endpoint
 ```bash
-[{
+{
     "name": "Colombia",
     "topLevelDomain": [".co"],
     "alpha2Code": "CO",
@@ -84,5 +84,5 @@ Response for `full_name` endpoint
         "otherNames": ["Unión de Naciones Suramericanas"..."]
     }],
     "cioc": "COL"
-}]
+}
 ```
