@@ -17,10 +17,9 @@ setup(
      author='Leon Kozlowski',
      author_email='leonkozlowski@gmail.com',
      classifiers=[
-         'Development Status :: 3 - Development',
-         'Intended Audience :: Developers',
-         'Topic :: Software Development :: RESTful API Wrapper',
-         'Programming Language :: Python :: 3.6'
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: MIT License",
+         "Operating System :: OS Independent",
      ],
      python_requires='>=3.6',
      keywords='REST Countries API',
