@@ -93,3 +93,14 @@ Response for `full_name` endpoint
     "cioc": "COL"
 }
 ```
+
+`CountryResponse` faccade for easy attribute access
+```bash
+>>> colombia = client.full_name('Colombia')
+
+>>> colombia.name
+>>> "Colombia"
+
+>>> colombia.flag
+>>> "https://restcountries.eu/data/col.svg"
+```
