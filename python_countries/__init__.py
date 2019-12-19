@@ -37,7 +37,7 @@ class CountriesApi(object):
             "alpha3Code": "COL",
             "callingCodes": ["57"],
             "capital": "Bogotá",
-            "altSpellings": ["CO", "Republic of Colombia", "República de Colombia"],
+            "altSpellings": ["CO", ... , "República de Colombia"],
             "region": "Americas",
             "subregion": "South America",
             "population": 48759958,
@@ -130,10 +130,11 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not name:
-            raise ValueError("Please enter a name for python-countries request")
+            raise ValueError("Please enter a valid country name")
 
         stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
-        resp_obj = requests.get(url=f"{self.base_url}name/{stripped_name.lower()}")
+        url = f"{self.base_url}name/{stripped_name.lower()}"
+        resp_obj = requests.get(url=url)
         self._check_http_status(resp_obj.status_code)
 
         resp = resp_obj.json()
@@ -154,7 +155,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not name:
-            raise ValueError("Please enter a name for python-countries request")
+            raise ValueError("Please enter a valid country name")
 
         stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
         url = f"{self.base_url}name/{stripped_name.lower()}"
@@ -182,7 +183,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not code:
-            raise ValueError("Please enter a iso_code for python-countries request")
+            raise ValueError("Please enter a valid iso_code")
 
         elif 2 < len(code) < 3:
             raise ValueError("ISO 3166-1 code must be 2 or 3 characters")
@@ -210,7 +211,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not currency:
-            raise ValueError("Please enter a currency for python-countries request")
+            raise ValueError("Please enter a valid currency")
 
         url = f"{self.base_url}currency/{currency.lower()}"
 
@@ -235,7 +236,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not language:
-            raise ValueError("Please enter a language for python-countries request")
+            raise ValueError("Please enter a valid language")
 
         url = f"{self.base_url}lang/{language.lower()}"
 
@@ -260,7 +261,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not city:
-            raise ValueError("Please enter a capital city for python-countries request")
+            raise ValueError("Please enter a valid capital city")
 
         stripped_city = re.sub(r"\s+", "?", city, flags=re.UNICODE)
         url = f"{self.base_url}capital/{stripped_city.lower()}"
@@ -288,7 +289,7 @@ class CountriesApi(object):
             resp: (dict) - json response object
         """
         if not calling_code:
-            raise ValueError("Please enter a calling code for python-countries request")
+            raise ValueError("Please enter a valid calling code")
 
         url = f"{self.base_url}callingcode/{str(calling_code)}"
 
@@ -326,7 +327,7 @@ class CountriesApi(object):
             EUROPE = "europe"
             OCEANIA = "oceania"
 
-        if not region in Region._value2member_map_:
+        if region not in Region._value2member_map_:
             raise ValueError(f"Valid regions are: {Region.list()}")
 
         url = f"{self.base_url}region/{region.lower()}"
@@ -351,96 +352,96 @@ class CountryResponse(dict):
 
     @property
     def name(self) -> str:
-        return self.get('name', None) if self else None
+        return self.get("name", None) if self else None
 
     @property
     def top_level_domain(self) -> list:
-        return self.get('topLevelDomain', None) if self else None
+        return self.get("topLevelDomain", None) if self else None
 
     @property
     def alpha_two_code(self) -> str:
-        return self.get('alpha2Code', None) if self else None
+        return self.get("alpha2Code", None) if self else None
 
     @property
     def alpha_three_code(self) -> str:
-        return self.get('alpha3Code', None) if self else None
+        return self.get("alpha3Code", None) if self else None
 
     @property
     def calling_codes(self) -> list:
-        return self.get('callingCodes', None) if self else None
+        return self.get("callingCodes", None) if self else None
 
     @property
     def capital(self) -> str:
-        return self.get('capital', None) if self else None
+        return self.get("capital", None) if self else None
 
     @property
     def alternate_spellings(self) -> list:
-        return self.get('altSpellings', None) if self else None
+        return self.get("altSpellings", None) if self else None
 
     @property
     def region(self) -> str:
-        return self.get('region') if self else None
+        return self.get("region") if self else None
 
     @property
     def subregion(self) -> str:
-        return self.get('subregion') if self else None
+        return self.get("subregion") if self else None
 
     @property
     def population(self) -> int:
-        return self.get('population') if self else None
+        return self.get("population") if self else None
 
     @property
     def lat_long(self) -> list:
-        return self.get('latlng') if self else None
+        return self.get("latlng") if self else None
 
     @property
     def demonym(self) -> str:
-        return self.get('demonym') if self else None
+        return self.get("demonym") if self else None
 
     @property
     def area(self) -> float:
-        return self.get('area') if self else None
+        return self.get("area") if self else None
 
     @property
     def gini(self) -> float:
-        return self.get('gini') if self else None
+        return self.get("gini") if self else None
 
     @property
     def timezones(self) -> list:
-        return self.get('timezones') if self else None
+        return self.get("timezones") if self else None
 
     @property
     def borders(self) -> list:
-        return self.get('borders') if self else None
+        return self.get("borders") if self else None
 
     @property
     def native_name(self) -> str:
-        return self.get('nativeName') if self else None
+        return self.get("nativeName") if self else None
 
     @property
     def numeric_code(self) -> str:
-        return self.get('numericCode') if self else None
+        return self.get("numericCode") if self else None
 
     @property
     def currencies(self) -> list:
-        return self.get('currencies') if self else None
+        return self.get("currencies") if self else None
 
     @property
     def languages(self) -> list:
-        return self.get('languages') if self else None
+        return self.get("languages") if self else None
 
     @property
     def translations(self) -> dict:
-        return self.get('translations') if self else None
+        return self.get("translations") if self else None
 
     @property
     def flag(self) -> str:
-        return self.get('flag') if self else None
+        return self.get("flag") if self else None
 
     @property
     def regional_blocs(self) -> list:
-        return self.get('regionalBlocs') if self else None
+        return self.get("regionalBlocs") if self else None
 
     @property
     def cioc(self) -> str:
-        return self.get('cioc') if self else None
+        return self.get("cioc") if self else None
