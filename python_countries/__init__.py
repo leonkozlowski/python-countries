@@ -151,7 +151,8 @@ class CountriesApi(object):
         Request "name" endpoint
         Search by country full name
 
-            (i.e) - "https://restcountries.eu/rest/v2/name/france?fullText=true"
+            (i.e)
+                "https://restcountries.eu/rest/v2/name/france?fullText=true"
 
         Args:
             name: (str) - name of country
