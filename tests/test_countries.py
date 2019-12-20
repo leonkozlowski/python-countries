@@ -20,47 +20,105 @@ def _resolve_relative_import(test_file):
 
 def test_countries_client():
     test_client = global_client
-    assert isinstance(test_client, object)
+    assert isinstance(test_client, CountriesApi)
 
 
 def test_countries_country_name():
     result = global_client.country_name(name='colombia')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/colombia-response.json')
+
+
+def test_countries_country_name_raises():
+    with pytest.raises(ValueError):
+        global_client.country_name(name=None)
 
 
 def test_countries_full_name():
     result = global_client.full_name(name='colombia')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/colombia-response.json')
+
+
+def test_countries_full_name_raises():
+    with pytest.raises(ValueError):
+        global_client.full_name(name=None)
 
 
 def test_countries_iso_code():
     result = global_client.iso_code(code='pr')
+
+    assert isinstance(result, dict)
     assert result == _resolve_relative_import('testData/puerto-rico-response.json')
+
+
+@pytest.mark.parametrize('code, exception', [
+    (None, ValueError),('a', Exception), ('abcd', Exception)])
+def test_countries_iso_code_raises(code, exception):
+    with pytest.raises(exception):
+        global_client.iso_code(code=code)
 
 
 def test_countries_currency():
     result = global_client.currency(currency='cop')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/colombia-response.json')
+
+
+def test_countries_currency_raises():
+    with pytest.raises(ValueError):
+        global_client.currency(currency=None)
 
 
 def test_countries_language():
     result = global_client.language(language='es')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/argentina-response.json')
+
+
+def test_countries_language_raises():
+    with pytest.raises(ValueError):
+        global_client.language(language=None)
 
 
 def test_capital_city():
     result = global_client.capital_city(city='Buenos Aires')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/argentina-response.json')
+
+
+def test_capital_city_raises():
+    with pytest.raises(ValueError):
+        global_client.capital_city(city=None)
 
 
 def test_calling_codes():
     result = global_client.calling_code(calling_code=1264)
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/anguilla-response.json')
+
+
+def test_calling_codes_raises():
+    with pytest.raises(ValueError):
+        global_client.calling_code(calling_code=None)
 
 
 def test_region():
     result = global_client.region(region='americas')
+
+    assert isinstance(result, list)
     assert result[0] == _resolve_relative_import('testData/anguilla-response.json')
+
+
+def test_region_raises():
+    with pytest.raises(ValueError):
+        global_client.region(region=None)
 
 
 def test_country_response_access():
@@ -94,7 +152,18 @@ def test_country_response_access():
     assert access_object.cioc is ''
 
 
-@pytest.mark.parametrize('status, exception', [(500, Exception),(401, Exception),(404, Exception)])
+@pytest.mark.parametrize('status, exception', [
+    (500, Exception),(401, Exception),(404, Exception), (418, Exception)])
 def test_request_status_raises(status, exception):
     with pytest.raises(exception):
         global_client._check_http_status(status)
+
+
+# @pytest.mark.parametrize('endpoint, return_type',
+#                          [
+#                              (),
+#                              (),
+#                              (),
+#                              ()
+#                          ])
+# def test_endpoint_return_types():
