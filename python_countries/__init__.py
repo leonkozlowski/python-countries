@@ -99,22 +99,27 @@ class CountriesApi(object):
             None: (NoneType) - raise exception on failure
         """
         if 500 <= status <= 503:
-            logger.error(f"Exception: {status}")
+            logger.error(f"Server Error: {status}")
+            raise Exception(status)
+
+        elif status == 400:
+            logger.error(f"Bad Request: {status}")
             raise Exception(status)
 
         elif status == 401:
-            logger.error(f"Exception: {status} - Access Denied")
+            logger.error(f"Access Denied: {status}")
             raise Exception(status)
 
         elif status == 404:
-            logger.error(f"Exception: {status} - Invalid Request")
+            logger.error(f"Invalid Request: {status}")
             raise Exception(status)
 
         elif status != 200:
-            logger.error(f"Exception: {status} - Error")
+            logger.error(f"Unhandled Exception: {status}")
+            raise Exception(status)
 
         else:
-            logger.info(f"Status: {status}")
+            logger.debug(f"Status: {status}")
 
     def country_name(self, name: str) -> dict:
         """
@@ -132,7 +137,7 @@ class CountriesApi(object):
         if not name:
             raise ValueError("Please enter a valid country name")
 
-        stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
+        stripped_name = re.sub(r"\s+", "?", name, flags=re.UNICODE)
         url = f"{self.base_url}name/{stripped_name.lower()}"
         resp_obj = requests.get(url=url)
         self._check_http_status(resp_obj.status_code)
@@ -146,7 +151,8 @@ class CountriesApi(object):
         Request "name" endpoint
         Search by country full name
 
-            (i.e) - "https://restcountries.eu/rest/v2/name/france?fullText=true"
+            (i.e)
+                "https://restcountries.eu/rest/v2/name/france?fullText=true"
 
         Args:
             name: (str) - name of country
@@ -157,7 +163,7 @@ class CountriesApi(object):
         if not name:
             raise ValueError("Please enter a valid country name")
 
-        stripped_name = re.sub(r"\s+", "", name, flags=re.UNICODE)
+        stripped_name = re.sub(r"\s+", "?", name, flags=re.UNICODE)
         url = f"{self.base_url}name/{stripped_name.lower()}"
 
         params = {"fullText": True}
@@ -184,9 +190,6 @@ class CountriesApi(object):
         """
         if not code:
             raise ValueError("Please enter a valid iso_code")
-
-        elif 2 < len(code) < 3:
-            raise ValueError("ISO 3166-1 code must be 2 or 3 characters")
 
         url = f"{self.base_url}alpha/{code.lower()}"
 
