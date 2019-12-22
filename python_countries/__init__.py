@@ -5,12 +5,14 @@ import logging
 import re
 import requests
 
+from requests import Response
+
 logging.basicConfig(level="INFO")
 logger = logging.getLogger(__name__)
 
 __author__ = "Leon Kozlowski"
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __maintainer__ = "Leon Kozlowski"
 __email__ = "leonkozlowski@gmail.com"
 __status__ = "Development"
@@ -89,7 +91,7 @@ class CountriesApi(object):
         self.base_url = "https://restcountries.eu/rest/v2/"
 
     @staticmethod
-    def _check_http_status(status: int) -> None:
+    def _check_http_status(response_object: Response) -> None:
         """
         Check Request Status and raise exception where applicable
         Args
@@ -98,28 +100,13 @@ class CountriesApi(object):
         Returns:
             None: (NoneType) - raise exception on failure
         """
-        if 500 <= status <= 503:
-            logger.error(f"Server Error: {status}")
-            raise Exception(status)
+        status_code = response_object.status_code
+        message = response_object.text
 
-        elif status == 400:
-            logger.error(f"Bad Request: {status}")
-            raise Exception(status)
-
-        elif status == 401:
-            logger.error(f"Access Denied: {status}")
-            raise Exception(status)
-
-        elif status == 404:
-            logger.error(f"Invalid Request: {status}")
-            raise Exception(status)
-
-        elif status != 200:
-            logger.error(f"Unhandled Exception: {status}")
-            raise Exception(status)
-
+        if response_object.status_code != 200:
+            raise CountriesApiError(message)
         else:
-            logger.debug(f"Status: {status}")
+            logger.debug(f"Request Successful: {status_code}")
 
     def country_name(self, name: str) -> dict:
         """
@@ -140,7 +127,7 @@ class CountriesApi(object):
         stripped_name = re.sub(r"\s+", "?", name, flags=re.UNICODE)
         url = f"{self.base_url}name/{stripped_name.lower()}"
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -169,7 +156,7 @@ class CountriesApi(object):
         params = {"fullText": True}
 
         resp_obj = requests.get(url=url, params=params)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -194,7 +181,7 @@ class CountriesApi(object):
         url = f"{self.base_url}alpha/{code.lower()}"
 
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -219,7 +206,7 @@ class CountriesApi(object):
         url = f"{self.base_url}currency/{currency.lower()}"
 
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -244,7 +231,7 @@ class CountriesApi(object):
         url = f"{self.base_url}lang/{language.lower()}"
 
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -271,7 +258,7 @@ class CountriesApi(object):
 
         resp_obj = requests.get(url=url)
 
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -297,7 +284,7 @@ class CountriesApi(object):
         url = f"{self.base_url}callingcode/{str(calling_code)}"
 
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
@@ -336,11 +323,16 @@ class CountriesApi(object):
         url = f"{self.base_url}region/{region.lower()}"
 
         resp_obj = requests.get(url=url)
-        self._check_http_status(resp_obj.status_code)
+        self._check_http_status(resp_obj)
 
         resp = resp_obj.json()
 
         return resp
+
+
+class CountriesApiError(Exception):
+    """Common base class for all non-exit exceptions."""
+    pass
 
 
 class CountryResponse(dict):
