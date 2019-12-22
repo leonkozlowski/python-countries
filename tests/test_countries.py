@@ -2,8 +2,11 @@ import json
 import os
 import pytest
 
-from python_countries import CountriesApi, CountryResponse
-
+from python_countries import (
+    CountriesApi,
+    CountriesApiError,
+    CountryResponse
+)
 
 global_client = CountriesApi()
 
@@ -157,3 +160,8 @@ def test_country_response_access():
 def test_request_status_raises(status, exception):
     with pytest.raises(exception):
         global_client._check_http_status(status)
+
+
+def test_countries_api_error_exception():
+    with pytest.raises(CountriesApiError):
+        global_client.iso_code('1234')
