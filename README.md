@@ -94,8 +94,8 @@ Response for `full_name` endpoint
 }
 ```
 
-`CountryResponse` faccade for easy attribute access
-```bash
+`CountryResponse` facade for easy attribute access
+```python
 >>> colombia = client.full_name('Colombia')
 
 >>> colombia.name
