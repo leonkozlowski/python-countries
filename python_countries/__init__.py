@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 __author__ = "Leon Kozlowski"
 
-__version__ = "0.0.3"
+__version__ = "1.0.0"
 __maintainer__ = "Leon Kozlowski"
 __email__ = "leonkozlowski@gmail.com"
 __status__ = "Development"
