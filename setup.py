@@ -3,7 +3,6 @@ from os import path
 from setuptools import setup, find_packages
 from io import open
 
-from python_countries import __version__
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
@@ -11,7 +10,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
      name='python-countries',
-     version=__version__,
+     version="1.0.1",
      description='Python bindings for REST Countries API',
      long_description=long_description,
      long_description_content_type='text/markdown',
