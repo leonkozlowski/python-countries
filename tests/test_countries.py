@@ -2,11 +2,7 @@ import json
 import os
 import pytest
 
-from python_countries import (
-    CountriesApi,
-    CountriesApiError,
-    CountryResponse
-)
+from python_countries import CountriesApi, CountriesApiError, CountryResponse
 
 global_client = CountriesApi()
 
@@ -21,6 +17,21 @@ def _resolve_relative_import(test_file):
 def test_countries_client():
     test_client = global_client
     assert isinstance(test_client, CountriesApi)
+
+
+def test_countries_all():
+    result = global_client.endpoints()
+
+    assert result == [
+        "country_name",
+        "full_name",
+        "iso_code",
+        "currency",
+        "language",
+        "capital_city",
+        "calling_code",
+        "region",
+    ]
 
 
 def test_countries_country_name():
@@ -164,4 +175,4 @@ def test_request_status_raises(status, exception):
 
 def test_countries_api_error_exception():
     with pytest.raises(CountriesApiError):
-        global_client.iso_code('1234')
+        global_client.iso_code("1234")
