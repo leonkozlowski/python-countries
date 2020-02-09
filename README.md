@@ -32,6 +32,12 @@ Create the client
 >>> client = CountriesApi()
 ```
 
+Show available endpoints
+```bash
+>>> client.endpoints()
+>>> ['country_name', 'full_name', 'iso_code', 'currency', 'language', 'capital_city', 'calling_code', 'region']
+```
+
 Request for country data by full name
 ```bash
 >>> client.full_name('Colombia')
