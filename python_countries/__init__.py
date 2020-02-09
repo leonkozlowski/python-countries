@@ -12,17 +12,26 @@ logger = logging.getLogger(__name__)
 
 __author__ = "Leon Kozlowski"
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __maintainer__ = "Leon Kozlowski"
 __email__ = "leonkozlowski@gmail.com"
-__status__ = "Development"
+__status__ = "Alpha"
+
+__all__ = [
+    "country_name",
+    "full_name",
+    "iso_code",
+    "currency",
+    "language",
+    "capital_city",
+    "calling_code",
+    "region",
+]
 
 
 class CountriesApi(object):
     """
-    Python bindings (API Wrapper)
-    Get information about countries via a RESTful API
-
+    Python bindings (API Wrapper) - countries via a RESTful API.
 
     Usage:
         API Key: None
@@ -30,7 +39,6 @@ class CountriesApi(object):
         >>> client = CountriesApi()
 
         >>> client.full_name(name='Colombia')
-
     Returns:
         {
             "name": "Colombia",
@@ -93,10 +101,10 @@ class CountriesApi(object):
     @staticmethod
     def _check_http_status(response_object: Response) -> None:
         """
-        Check Request Status and raise exception where applicable
+        Check Request Status and raise exception where applicable.
+
         Args
             status: (int) - HTTP request status code
-
         Returns:
             None: (NoneType) - raise exception on failure
         """
@@ -105,19 +113,22 @@ class CountriesApi(object):
 
         if response_object.status_code != 200:
             raise CountriesApiError(message)
-        else:
-            logger.debug(f"Request Successful: {status_code}")
+
+        logger.debug("Request Successful: {}".format(status_code))
+
+    @staticmethod
+    def endpoints():
+        """List all possible endpoints."""
+        return __all__
 
     def country_name(self, name: str) -> dict:
         """
-        Request "name" endpoint
-        Search by country name. It can be the native name or partial name
+        Request "name" endpoint - Search by country name.
 
             (i.e) - "https://restcountries.eu/rest/v2/name/france"
 
         Args:
             name: (str) - name of country
-
         Returns:
             resp: (dict) - json response object
         """
@@ -135,15 +146,13 @@ class CountriesApi(object):
 
     def full_name(self, name: str) -> dict:
         """
-        Request "name" endpoint
-        Search by country full name
+        Request "name" endpoint - Search by country full name.
 
             (i.e)
                 "https://restcountries.eu/rest/v2/name/france?fullText=true"
 
         Args:
             name: (str) - name of country
-
         Returns:
             resp: (dict) - json response object
         """
@@ -164,14 +173,12 @@ class CountriesApi(object):
 
     def iso_code(self, code: str) -> dict:
         """
-        Request "code" endpoint
-        Search by ISO 3166-1 2-letter or 3-letter country code
+        Request "code" endpoint - Search by ISO 3166-1 2/3 letter country code.
 
             (i.e) - "https://restcountries.eu/rest/v2/alpha/fra"
 
         Args:
             code: (str) - ISO 3166-1 (2 or 3 letter code)
-
         Returns:
             resp: (dict) - json response object
         """
@@ -189,8 +196,7 @@ class CountriesApi(object):
 
     def currency(self, currency: str) -> list:
         """
-        Request "currency" endpoint
-        Search by ISO 4217 currency code
+        Request "currency" endpoint - Search by ISO 4217 currency code.
 
             (i.e) - "https://restcountries.eu/rest/v2/currency/usd"
 
@@ -214,14 +220,12 @@ class CountriesApi(object):
 
     def language(self, language: str):
         """
-        Request language endpoint
-        Search by ISO 639-1 language code
+        Request language endpoint - Search by ISO 639-1 language code.
 
             (i.e) - "https://restcountries.eu/rest/v2/lang/es"
 
         Args:
             language: (str) - ISO 639-1 language code
-
         Returns:
             resp: (dict) - json response object
         """
@@ -239,14 +243,12 @@ class CountriesApi(object):
 
     def capital_city(self, city: str) -> dict:
         """
-        Request capital city endpoint
-        Search by capital city
+        Request capital city endpoint - Search by capital city.
 
             (i.e) - "https://restcountries.eu/rest/v2/capital/tallinn"
 
         Args:
             city: (str) - capital city
-
         Returns:
             resp: (dict) - json response object
         """
@@ -266,15 +268,13 @@ class CountriesApi(object):
 
     def calling_code(self, calling_code: int) -> dict:
         """
-        Request capital city endpoint
-        Search by calling code
+        Request capital city endpoint - Search by calling code.
 
             (i.e) - "https://restcountries.eu/rest/v2/callingcode/372"
 
         Args:
             calling_code: (str) - calling code
             (ref: https://countrycode.org/)
-
         Returns:
             resp: (dict) - json response object
         """
@@ -292,25 +292,28 @@ class CountriesApi(object):
 
     def region(self, region: str) -> dict:
         """
-        Request region endpoint
-        Search by region
+        Request region endpoint - Search by region.
 
             (i.e) - "https://restcountries.eu/rest/v2/region/americas"
 
         Args:
             region: (str) - region
             [Africa, Americas, Asia, Europe, Oceania]
-
         Returns:
             resp: (dict) - json response object
         """
 
         class ExtendedEnum(enum.Enum):
+            """Enum for regions."""
+
             @classmethod
             def list(cls):
+                """List ExtendedEnum for regions."""
                 return list(map(lambda c: c.value, cls))
 
         class Region(ExtendedEnum):
+            """Region objects."""
+
             AFRICA = "africa"
             AMERICAS = "americas"
             ASIA = "asia"
@@ -332,111 +335,133 @@ class CountriesApi(object):
 
 class CountriesApiError(Exception):
     """Common base class for all non-exit exceptions."""
+
     pass
 
 
 class CountryResponse(dict):
-    def __init__(self, data: dict):
-        """
-        Country REST API Response Object Access
-        Args:
-            data: (dict) response json object
-        """
+    """Country REST API Response Object Access."""
 
+    def __init__(self, data: dict):
+        """Constructor for CountriesResponse."""
         super(CountryResponse, self).__init__(data)
 
     @property
     def name(self) -> str:
+        """Access for response.name."""
         return self.get("name", None) if self else None
 
     @property
     def top_level_domain(self) -> list:
+        """Access for response.topLevelDomain."""
         return self.get("topLevelDomain", None) if self else None
 
     @property
     def alpha_two_code(self) -> str:
+        """Access for response.alpha2Code."""
         return self.get("alpha2Code", None) if self else None
 
     @property
     def alpha_three_code(self) -> str:
+        """Access for response."""
         return self.get("alpha3Code", None) if self else None
 
     @property
     def calling_codes(self) -> list:
+        """Access for response.callingCodes."""
         return self.get("callingCodes", None) if self else None
 
     @property
     def capital(self) -> str:
+        """Access for response.capital."""
         return self.get("capital", None) if self else None
 
     @property
     def alternate_spellings(self) -> list:
+        """Access for response.altSpellings."""
         return self.get("altSpellings", None) if self else None
 
     @property
     def region(self) -> str:
+        """Access for response.region."""
         return self.get("region") if self else None
 
     @property
     def subregion(self) -> str:
+        """Access for response.subregion."""
         return self.get("subregion") if self else None
 
     @property
     def population(self) -> int:
+        """Access for response.population"""
         return self.get("population") if self else None
 
     @property
     def lat_long(self) -> list:
+        """Access for response.latlng."""
         return self.get("latlng") if self else None
 
     @property
     def demonym(self) -> str:
+        """Access for response.demonym."""
         return self.get("demonym") if self else None
 
     @property
     def area(self) -> float:
+        """Access for response.area."""
         return self.get("area") if self else None
 
     @property
     def gini(self) -> float:
+        """Access for response.gini."""
         return self.get("gini") if self else None
 
     @property
     def timezones(self) -> list:
+        """Access for response.timezones."""
         return self.get("timezones") if self else None
 
     @property
     def borders(self) -> list:
+        """Access for response.borders."""
         return self.get("borders") if self else None
 
     @property
     def native_name(self) -> str:
+        """Access for response.nativeName."""
         return self.get("nativeName") if self else None
 
     @property
     def numeric_code(self) -> str:
+        """Access for response.numericCode."""
         return self.get("numericCode") if self else None
 
     @property
     def currencies(self) -> list:
+        """Access for response.currencies."""
         return self.get("currencies") if self else None
 
     @property
     def languages(self) -> list:
+        """Access for response.languages."""
         return self.get("languages") if self else None
 
     @property
     def translations(self) -> dict:
+        """Access for response.translations."""
         return self.get("translations") if self else None
 
     @property
     def flag(self) -> str:
+        """Access for response.flag."""
         return self.get("flag") if self else None
 
     @property
     def regional_blocs(self) -> list:
+        """Access for response.regionalBlocs."""
         return self.get("regionalBlocs") if self else None
 
     @property
     def cioc(self) -> str:
+        """Access for response.cioc."""
         return self.get("cioc") if self else None
